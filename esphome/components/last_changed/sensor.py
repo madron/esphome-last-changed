@@ -21,18 +21,16 @@ CONFIG_SCHEMA = sensor.sensor_schema(
 )
 
 
-CONFIG_SCHEMA = CONFIG_SCHEMA.extend(
-    {
+CONFIG_SCHEMA = cv.All(
+    CONFIG_SCHEMA.extend(
+        {
         cv.GenerateID(): cv.declare_id(LastChanged),
         cv.Optional(CONF_SENSOR): cv.use_id(sensor.Sensor),
         cv.Optional(CONF_BINARY_SENSOR): cv.use_id(binary_sensor.BinarySensor),
-    }
-).extend(cv.polling_component_schema('60s'))
-
-
-        # cv.has_exactly_one_key(CONF_SENSOR, CONF_BINARY_SENSOR),
-#     )
-# )
+        }
+    ).extend(cv.polling_component_schema('60s')),
+    cv.has_exactly_one_key(CONF_SENSOR, CONF_BINARY_SENSOR)
+)
 
 
 async def to_code(config):
